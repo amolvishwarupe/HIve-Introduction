@@ -1,0 +1,43 @@
+1. Is it possible to use same meta store by multiple users in case of embedded Hive, if no then
+why?
+
+
+ No, it is not possible to use metastore in sharing mode. It is recommended to use standalone "real" database like MySQL or PostGresSQL.
+
+2. What is SerDe in Hive?
+
+A SerDe is a short name for a Serializer Deserializer. Hive uses SerDe (and FileFormat) to read and write data from tables. An important concept behind Hive is that it DOES NOT own the Hadoop File System (HDFS) format that data is stored in. Users are able to write files to HDFS with whatever tools/mechanism takes their fancy("CREATE EXTERNAL TABLE" or "LOAD DATA INPATH," ) and use Hive to correctly "parse" that file format in a way that can be used by Hive. A SerDe is a powerful (and customizable) mechanism that Hive uses to "parse" data stored in HDFS to be used by Hive.
+
+3. What is the functionality of query processor in Apache Hive?
+
+This component implements the processing framework for converting SQL to a graph of map/reduce jobs and the execution time framework to run those jobs in the order of dependencies
+
+4. How can Hive avoid MapReduce?
+
+
+5. What are the types of table in Hive?
+
+external table managed table
+
+6. Does Hive support record level insert, delete or update?
+
+yes with some properties set hive transaction
+
+7. What are the binary storage formats supported in Hive?
+
+
+8. What is the difference between external table and internal table in Hive? 
+
+External table in HIVE
+(stores data on HDFS) 
+
+External table stores files on the HDFS server but tables are not linked to the source file completely.(I have explained below what I meant by completely) 
+If you delete an external table the file still remains on the HDFS server.
+The file and the table link is there but read only.
+As an example if you create an external table called “amandeep_test” in HIVE using HIVE-QL and link the table to file “flat_file.txt”, then deleting “amandeep_test” from HIVE will not delete “flat_file.txt” from HDFS.
+External table files are accessible to anyone who has access to HDFS file structure and therefore security needs to be managed at the HDFS file/folder level.
+Meta data is maintained on master node and deleting an external table from HIVE, only deletes the metadata not the data/file.
+Use external table if you:
+Want to manage the data outside HIVE e.g. you are planning to use an ETL tool to load/merge data files etc.
+Want to load the latest information to the table but still want to retain old dataset in a file on HDFS for regulatory/legal purposes.
+Are not planning to create a table from another table schema e.g. Create table1 as (Select * from table2)
